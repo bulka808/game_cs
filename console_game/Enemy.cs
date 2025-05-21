@@ -3,7 +3,7 @@ namespace console_game;
 
 public class Enemy
 {
-    public Point pos { get; set; }
+    public Point pos;
 
     public Enemy(Point pos)
     {
