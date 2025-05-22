@@ -13,18 +13,44 @@ public class Player
         this.Health = health;
     }
 
-    public Point[] Attack()
+    public void Move(int ch)
+    {
+        switch (ch)
+        {
+            case 1:
+                Pos -= new Point(0, 1);
+                break;
+            case 2:
+                Pos += new Point(0, 1);
+                break;
+            case 3:
+                Pos += new Point(1, 0);
+                break;
+            case 4:
+                Pos -= new Point(1, 0);
+                break;
+        }
+    }
+
+
+    public List<Point> Attack()
     {
         atk = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        var points = new Point[8];
-        points[0] = Pos + new Point(-1,  0);
-        points[1] = Pos + new Point(-1,  1);
-        points[2] = Pos + new Point( 0,  1);
-        points[3] = Pos + new Point( 1,  1);
-        points[4] = Pos + new Point( 1,  0);
-        points[5] = Pos + new Point( 1, -1);
-        points[6] = Pos + new Point( 0, -1);
-        points[7] = Pos + new Point(-1, -1);
+        List<Point> points = new();
+        // points.Add(Pos + new Point(-1,  0));
+        // points.Add(Pos + new Point(-1,  1));
+        // points.Add(Pos + new Point( 0,  1));
+        // points.Add(Pos + new Point( 1,  1));
+        // points.Add(Pos + new Point( 1,  0));
+        // points.Add(Pos + new Point( 1,  1));
+        // points.Add(Pos + new Point( 0, -1));
+        // points.Add(Pos + new Point(-1, -1));
+        for (int i = -1; i <= 1; i++)
+        for (int j = -1; j <= 1; j++)
+        {
+            points.Add(Pos + new Point(i, j));
+        }
+
         return points;
     }
 }
