@@ -6,11 +6,13 @@ public class Player
 {
     public int Health;
     public Point Pos = new Point(0, 0);
-    public long atk = DateTimeOffset.Now.ToUnixTimeMilliseconds()-500;
+    public long AttackCd = 100;
+    public long atk;
     
     public Player(int health)
     {
         this.Health = health;
+        this.atk = 0;
     }
 
     public void Move(int ch)
@@ -45,8 +47,8 @@ public class Player
         // points.Add(Pos + new Point( 1,  1));
         // points.Add(Pos + new Point( 0, -1));
         // points.Add(Pos + new Point(-1, -1));
-        for (int i = -1; i <= 1; i++)
-        for (int j = -1; j <= 1; j++)
+        for (int i = -2; i <= 2; i++)
+        for (int j = -2; j <= 2; j++)
         {
             points.Add(Pos + new Point(i, j));
         }
