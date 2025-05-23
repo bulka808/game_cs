@@ -14,7 +14,6 @@ public class Player
         this.Health = health;
         this.atk = 0;
     }
-
     public void Move(int ch)
     {
         switch (ch)
