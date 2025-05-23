@@ -44,10 +44,14 @@ internal class Program: ConsoleGame
         if (Engine.GetKeyDown(ConsoleKey.RightArrow)  && _player.Pos.X != _map.GetLength(1) - 1) { _player.Move(3); }
         if (Engine.GetKeyDown(ConsoleKey.LeftArrow )  && _player.Pos.X != 0)                               { _player.Move(4); }
         
-        if (Engine.GetMouseLeft() && DateTimeOffset.Now.ToUnixTimeMilliseconds() >= _player.atk+500)
+        if (Engine.GetMouseLeft() && DateTimeOffset.Now.ToUnixTimeMilliseconds() >= _player.atk+_player.AttackCd)
         {
             var points = _player.Attack();
             points.ForEach(p => PlayerAtck.Add(p));
+            
+            Enemies.RemoveAll(enemy => {
+                return PlayerAtck.Any((p) =>  p.X == (enemy.Pos-_offset).X && p.Y == (enemy.Pos-_offset).Y );
+            });
         }
 
         if (Engine.GetKeyDown(ConsoleKey.Spacebar))
@@ -63,8 +67,13 @@ internal class Program: ConsoleGame
             try { Enemies.Add(new Enemy(pos)); }
             catch (Exception e) { }
         }
-        
-        Enemies.ForEach(Enemy => Enemy.Attack(_player, _offset));
+
+        if (this.FrameCounter % 5 == 0)
+        {
+            Enemies.ForEach(enemy => enemy.MoveOrAttack(_player, _offset));
+        }
+
+
     }
 
     public override void Render() {
@@ -97,9 +106,6 @@ internal class Program: ConsoleGame
         PlayerAtck.ForEach((point) => {
             try { Engine.SetPixel(point+_offset, (int)ConsoleColor.DarkCyan, ConsoleCharacter.Medium); }
             catch (Exception e) { }
-        });
-        Enemies.RemoveAll(enemy => {
-            return PlayerAtck.Any((p) =>  p.X == (enemy.Pos-_offset).X && p.Y == (enemy.Pos-_offset).Y );
         });
         PlayerAtck.Clear();
 
