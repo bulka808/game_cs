@@ -47,10 +47,17 @@ public class Player
         // points.Add(Pos + new Point( 1,  1));
         // points.Add(Pos + new Point( 0, -1));
         // points.Add(Pos + new Point(-1, -1));
-        for (int i = -2; i <= 2; i++)
-        for (int j = -2; j <= 2; j++)
+        for (int i = -3; i <= 3; i++)
+        for (int j = -3; j <= 3; j++)
         {
+            if ((Math.Abs(i) == 3 && Math.Abs(j) == 3) || (Math.Abs(i) == 2 && Math.Abs(j) == 3) ||
+                (Math.Abs(i) == 3 && Math.Abs(j) == 2))
+            {
+                continue;
+            }
+
             points.Add(Pos + new Point(i, j));
+            
         }
 
         return points;
