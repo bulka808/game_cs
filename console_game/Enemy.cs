@@ -11,10 +11,7 @@ public class Enemy(Point pos)
         var dist = Math.Floor(Point.Distance(playerPos, Pos));
         if (Math.Abs(Pos.X - playerPos.X) == 1 && Math.Abs(Pos.Y - playerPos.Y) == 1)
         {
-            if (playerPos.X < Pos.X) { Pos.X--; }
-            else if (playerPos.X > Pos.X) { Pos.X++; }
-            else if (playerPos.Y < Pos.Y) { Pos.Y--; }
-            else if (playerPos.Y > Pos.Y) { Pos.Y++; }
+            player.Health -= 1; 
         }
         else if (dist > 1)
         {
