@@ -73,15 +73,16 @@ namespace console_game
 
         public override void Update() {
             //-4, -3 для того чтобы не выходил за край
+            //вверх
             if ((Engine.GetKeyDown(ConsoleKey.UpArrow   ) | Engine.GetKeyDown(ConsoleKey.W)) && _player.Pos.Y != 0) 
             { _player.Move(Player.Direction.Up); }
-            
+            //вниз
             if ((Engine.GetKeyDown(ConsoleKey.DownArrow ) | Engine.GetKeyDown(ConsoleKey.S)) && _player.Pos.Y != Height - 4) 
             { _player.Move(Player.Direction.Down); }
-                        
+            //влево
             if ((Engine.GetKeyDown(ConsoleKey.LeftArrow ) | Engine.GetKeyDown(ConsoleKey.A)) && _player.Pos.X != 0)          
             { _player.Move(Player.Direction.Left); }
-            
+            //вправо
             if ((Engine.GetKeyDown(ConsoleKey.RightArrow) | Engine.GetKeyDown(ConsoleKey.D)) && _player.Pos.X != Width  - 3) 
             { _player.Move(Player.Direction.Right); }
 
