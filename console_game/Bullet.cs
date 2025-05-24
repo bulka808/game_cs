@@ -3,7 +3,8 @@ namespace console_game;
 
 public class Bullet(Point startPoint, Point endPoint)
 {
-    public List<Point> Points = GenerateTrajectory(startPoint, endPoint);
+    public readonly List<Point> Points = GenerateTrajectory(startPoint, endPoint);
+    public bool IsActive = true;
 
     private static List<Point> GenerateTrajectory(Point sp, Point ep)
     {
