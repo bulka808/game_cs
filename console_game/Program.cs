@@ -1,21 +1,22 @@
 ﻿using ConsoleGameEngine;
 
 
- // 1 строка под вывод фпс и т.д.
+
 
 namespace console_game
 {
     internal class Program: ConsoleGame
     {
-        private const int Width = 30;
-        private const int Height = Width+1;
-        private static void Main(string[] args) {
+        private const int Width = 30; // на самом деле -3
+        private const int Height = Width+1; // на самом деле -4
+        // 1 строка под вывод фпс и т.д.
+        private static void Main( ) {
             new Program().Construct(Width, Height, 16, 16, FramerateMode.MaxFps);
         }
 
         private int[,]? _map; //TODO класс Map для карты
         private Player _player = new(10);
-        public List<Point> PlayerAtck  = [];
+        public List<Point> PlayerAttack  = [];
         public List<Enemy> Enemies = [];
         readonly Point _offset = new Point(1, 2);
 
@@ -79,30 +80,30 @@ namespace console_game
             if (Engine.GetMouseLeft() && DateTimeOffset.Now.ToUnixTimeMilliseconds() >= _player.atk+_player.AttackCd)
             {
                 var points = _player.Attack();
-                points.ForEach(p => PlayerAtck.Add(p));
+                points.ForEach(p => PlayerAttack.Add(p));
             
                 Enemies.RemoveAll(enemy => {
-                    return PlayerAtck.Any((p) =>  p.X == enemy.Pos.X && p.Y == enemy.Pos.Y );
+                    return PlayerAttack.Any((p) =>  p.X == enemy.Pos.X && p.Y == enemy.Pos.Y );
                 });
             }
 
             if (Engine.GetKeyDown(ConsoleKey.Spacebar))
             {   
                 var pos = Engine.GetMousePos();
-                try { _map[pos.Y-2, pos.X-1] = 4; }
-                catch (Exception e) { }
+                try { _map![pos.Y-2, pos.X-1] = 4; }
+                catch (Exception) { /* ignored */ }
             }
 
             if (Engine.GetKeyDown(ConsoleKey.E))
             {
                 var pos = Engine.GetMousePos()-_offset;
                 try { CreateEnemy(pos);}
-                catch (Exception e) { }
+                catch (Exception) { /* ignored */ }
             }
             if (Engine.GetKeyDown(ConsoleKey.R))
             {
                 try { CreateEnemy();}
-                catch (Exception e) { }
+                catch (Exception) { /* ignored */ }
             }
 
             if (this.FrameCounter % 5 == 0)
@@ -117,7 +118,7 @@ namespace console_game
             Engine.ClearBuffer();
             Engine.Frame(new Point(0, 1), new Point(Width-1, Height-1), 7);
 
-            for (var y = 0; y < _map.GetLength(0); y++)
+            for (var y = 0; y < _map!.GetLength(0); y++)
             for (var x = 0; x < _map.GetLength(1); x++)
             {
                 var p = new Point(x, y) + _offset;
@@ -138,13 +139,13 @@ namespace console_game
 
             Enemies.ForEach(enemy => { 
                 try { Engine.SetPixel(enemy.Pos+_offset, (int)ConsoleColor.DarkRed, (ConsoleCharacter)'@'); }
-                catch (Exception e) { } 
+                catch (Exception ) { /* ignored */ } 
             });
-            PlayerAtck.ForEach((point) => {
+            PlayerAttack.ForEach((point) => {
                 try { Engine.SetPixel(point+_offset, (int)ConsoleColor.DarkCyan, ConsoleCharacter.Medium); }
-                catch (Exception e) { }
+                catch (Exception) { /* ignored */ }
             });
-            PlayerAtck.Clear();
+            PlayerAttack.Clear();
 
 
             Engine.WriteText(new Point(0,0), $"{Math.Round(this.GetFramerate())}",2 );
