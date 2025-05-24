@@ -2,20 +2,15 @@ using ConsoleGameEngine;
 namespace console_game;
 
 
-public class Player
+public class Player(int health)
 {
     public enum Direction { Up = 1, Down, Left, Right }
     
-    public int Health;
+    public int Health = health;
     public Point Pos = new Point(0, 0);
-    public long AttackCd = 100;
-    public long atk;
-    
-    public Player(int health)
-    {
-        this.Health = health;
-        this.atk = 0;
-    }
+    public readonly long AttackCd = 100;
+    public long Atk = 0;
+
     public void Move(Direction ch)
     {
         switch (ch)
@@ -38,7 +33,7 @@ public class Player
 
     public List<Point> Attack()
     {
-        atk = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        Atk = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         List<Point> points = [];
         // points.Add(Pos + new Point(-1,  0));
         // points.Add(Pos + new Point(-1,  1));
