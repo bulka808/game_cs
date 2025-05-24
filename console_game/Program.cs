@@ -93,7 +93,6 @@ namespace console_game
                 //////////////////////////////////////////////////////////
                 var pos = Engine.GetMousePos();
                 _bullets.Add(new Bullet(_player.Pos, pos-_offset ));
-                _enemies.RemoveAll(enemy => _bullets.Any(bullet => bullet.IsActive && bullet.Points[0].X == enemy.Pos.X && bullet.Points[0].Y == enemy.Pos.Y));
             }
             
             if (Engine.GetKeyDown(ConsoleKey.Spacebar))
@@ -114,7 +113,7 @@ namespace console_game
                 try { CreateEnemy();}
                 catch (Exception) { /* ignored */ }
             }
-            
+            _enemies.RemoveAll(enemy => _bullets.Any(bullet => bullet.IsActive && bullet.Points[0].X == enemy.Pos.X && bullet.Points[0].Y == enemy.Pos.Y));
             if (this.FrameCounter % 5 == 0) { _enemies.ForEach(enemy => enemy.MoveOrAttack(_player, _offset)); }
             
             for (var i = _bullets.Count - 1; i >= 0; i--) { if (!_bullets[i].IsActive) { _bullets.RemoveAt(i); } }
