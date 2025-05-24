@@ -1,16 +1,11 @@
 using ConsoleGameEngine;
 namespace console_game;
 
-public class Bullet
+public class Bullet(Point startPoint, Point endPoint)
 {
-    public List<Point> Points;
+    public List<Point> Points = GenerateTrajectory(startPoint, endPoint);
 
-    public Bullet(Point startPoint, Point endPoint)
-    {
-        Points = GenerateTrajectory(startPoint, endPoint);
-    }
-
-    private List<Point> GenerateTrajectory(Point sp, Point ep)
+    private static List<Point> GenerateTrajectory(Point sp, Point ep)
     {
         List<Point> points = [];
         var x0 = sp.X; var y0 = sp.Y;
