@@ -16,9 +16,9 @@ namespace console_game
 
         private int[,]? _map; //TODO класс Map для карты
         private readonly Player _player = new(10);
-        private readonly List<Point> _playerAttack  = [];
         private readonly List<Enemy> _enemies = [];
-        readonly Point _offset = new Point(1, 2);
+        private readonly List<Bullet> _bullets = [];
+        private readonly Point _offset = new Point(1, 2);
 
         private void CreateEnemy(Point pos) { _enemies.Add(new Enemy(pos)); }
 
@@ -87,16 +87,15 @@ namespace console_game
             { _player.Move(Player.Direction.Right); }
 
         
-            if (Engine.GetMouseLeft() && DateTimeOffset.Now.ToUnixTimeMilliseconds() >= _player.atk+_player.AttackCd)
-            {
-                var points = _player.Attack();
-                points.ForEach(p => _playerAttack.Add(p));
-            
-                _enemies.RemoveAll(enemy => {
-                    return _playerAttack.Any((p) =>  p.X == enemy.Pos.X && p.Y == enemy.Pos.Y );
-                });
+            if (Engine.GetMouseLeft() && DateTimeOffset.Now.ToUnixTimeMilliseconds() >= _player.Atk+_player.AttackCd)
+            {   /*TODO убрать костыль*////////////////////////////////////
+                _player.Atk = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                //////////////////////////////////////////////////////////
+                var pos = Engine.GetMousePos();
+                _bullets.Add(new Bullet(_player.Pos, pos-_offset ));
+                _enemies.RemoveAll(enemy => _bullets.Any(bullet => bullet.IsActive && bullet.Points[0].X == enemy.Pos.X && bullet.Points[0].Y == enemy.Pos.Y));
             }
-
+            
             if (Engine.GetKeyDown(ConsoleKey.Spacebar))
             {   
                 var pos = Engine.GetMousePos();
@@ -115,13 +114,10 @@ namespace console_game
                 try { CreateEnemy();}
                 catch (Exception) { /* ignored */ }
             }
-
-            if (this.FrameCounter % 5 == 0)
-            {
-                _enemies.ForEach(enemy => enemy.MoveOrAttack(_player, _offset));
-            }
-
-
+            
+            if (this.FrameCounter % 5 == 0) { _enemies.ForEach(enemy => enemy.MoveOrAttack(_player, _offset)); }
+            
+            for (var i = _bullets.Count - 1; i >= 0; i--) { if (!_bullets[i].IsActive) { _bullets.RemoveAt(i); } }
         }
 
         public override void Render() {
@@ -151,11 +147,17 @@ namespace console_game
                 try { Engine.SetPixel(enemy.Pos+_offset, (int)ConsoleColor.DarkRed, (ConsoleCharacter)'@'); }
                 catch (Exception ) { /* ignored */ } 
             });
-            _playerAttack.ForEach((point) => {
-                try { Engine.SetPixel(point+_offset, (int)ConsoleColor.DarkCyan, ConsoleCharacter.Medium); }
-                catch (Exception) { /* ignored */ }
+            
+            _bullets.ForEach(bullet =>
+            {
+                try
+                {
+                    Engine.SetPixel(bullet.Points[0]+_offset, (int)ConsoleColor.Magenta, (ConsoleCharacter)'*');
+                    bullet.Points.RemoveAt(0);
+                    if (bullet.Points.Count <= 0) { bullet.IsActive = false; }
+                }
+                catch (Exception ) { /* ignored */ }
             });
-            _playerAttack.Clear();
 
 
             Engine.WriteText(new Point(0,0), $"{Math.Round(this.GetFramerate())}",2 );
