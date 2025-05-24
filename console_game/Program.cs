@@ -15,16 +15,15 @@ namespace console_game
 
         private int[,]? _map; //TODO класс Map для карты
         private Player _player = new(10);
-        public List<Point> PlayerAtck  = new();
-        public List<Enemy> Enemies = new();
+        public List<Point> PlayerAtck  = [];
+        public List<Enemy> Enemies = [];
         readonly Point _offset = new Point(1, 2);
 
         public void CreateEnemy(Point pos) { Enemies.Add(new Enemy(pos)); }
-
         public void CreateEnemy()
         {
            var rand = new Random();
-           int side =  rand.Next(4);
+           var side =  rand.Next(4);
            int x = 0, y = 0;
            switch (side)
            {
@@ -40,7 +39,7 @@ namespace console_game
                    x = -2;
                    y = rand.Next(-2, Height+2);
                    break;
-               case 3:
+               case 3: 
                    x = Height+2;
                    y = rand.Next(-2, Height+2);
                    break;

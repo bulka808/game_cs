@@ -37,7 +37,7 @@ public class Player
     public List<Point> Attack()
     {
         atk = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        List<Point> points = new();
+        List<Point> points = [];
         // points.Add(Pos + new Point(-1,  0));
         // points.Add(Pos + new Point(-1,  1));
         // points.Add(Pos + new Point( 0,  1));
@@ -46,8 +46,8 @@ public class Player
         // points.Add(Pos + new Point( 1,  1));
         // points.Add(Pos + new Point( 0, -1));
         // points.Add(Pos + new Point(-1, -1));
-        for (int i = -3; i <= 3; i++)
-        for (int j = -3; j <= 3; j++)
+        for (var i = -3; i <= 3; i++)
+        for (var j = -3; j <= 3; j++)
         {
             if ((Math.Abs(i) == 3 && Math.Abs(j) == 3) || (Math.Abs(i) == 2 && Math.Abs(j) == 3) ||
                 (Math.Abs(i) == 3 && Math.Abs(j) == 2))

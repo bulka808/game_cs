@@ -9,8 +9,9 @@ public class Enemy(Point pos)
     {   
        
         var dist = Math.Floor(Point.Distance(player.Pos, Pos));
+        
         if (Math.Abs(Pos.X - player.Pos.X) == 1 && Math.Abs(Pos.Y - player.Pos.Y) == 1)
-        {
+        {// для атаки наискосок, в самом верху чтобы проверилось первым и враг не заходил в игрока
             player.Health -= 1; 
         }
         else if (dist > 1)
