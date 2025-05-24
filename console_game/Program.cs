@@ -15,13 +15,14 @@ namespace console_game
         }
 
         private int[,]? _map; //TODO класс Map для карты
-        private Player _player = new(10);
-        public List<Point> PlayerAttack  = [];
-        public List<Enemy> Enemies = [];
+        private readonly Player _player = new(10);
+        private readonly List<Point> _playerAttack  = [];
+        private readonly List<Enemy> _enemies = [];
         readonly Point _offset = new Point(1, 2);
 
-        public void CreateEnemy(Point pos) { Enemies.Add(new Enemy(pos)); }
-        public void CreateEnemy()
+        private void CreateEnemy(Point pos) { _enemies.Add(new Enemy(pos)); }
+
+        private void CreateEnemy()
         {
            var rand = new Random();
            var side =  rand.Next(4);
@@ -46,7 +47,7 @@ namespace console_game
                    break;
            }
            var pos = new Point(x, y);
-           Enemies.Add(new Enemy(pos));
+           _enemies.Add(new Enemy(pos));
         }
 
         public override void Create() {
@@ -80,10 +81,10 @@ namespace console_game
             if (Engine.GetMouseLeft() && DateTimeOffset.Now.ToUnixTimeMilliseconds() >= _player.atk+_player.AttackCd)
             {
                 var points = _player.Attack();
-                points.ForEach(p => PlayerAttack.Add(p));
+                points.ForEach(p => _playerAttack.Add(p));
             
-                Enemies.RemoveAll(enemy => {
-                    return PlayerAttack.Any((p) =>  p.X == enemy.Pos.X && p.Y == enemy.Pos.Y );
+                _enemies.RemoveAll(enemy => {
+                    return _playerAttack.Any((p) =>  p.X == enemy.Pos.X && p.Y == enemy.Pos.Y );
                 });
             }
 
@@ -108,7 +109,7 @@ namespace console_game
 
             if (this.FrameCounter % 5 == 0)
             {
-                Enemies.ForEach(enemy => enemy.MoveOrAttack(_player, _offset));
+                _enemies.ForEach(enemy => enemy.MoveOrAttack(_player, _offset));
             }
 
 
@@ -137,15 +138,15 @@ namespace console_game
                 }
             }
 
-            Enemies.ForEach(enemy => { 
+            _enemies.ForEach(enemy => { 
                 try { Engine.SetPixel(enemy.Pos+_offset, (int)ConsoleColor.DarkRed, (ConsoleCharacter)'@'); }
                 catch (Exception ) { /* ignored */ } 
             });
-            PlayerAttack.ForEach((point) => {
+            _playerAttack.ForEach((point) => {
                 try { Engine.SetPixel(point+_offset, (int)ConsoleColor.DarkCyan, ConsoleCharacter.Medium); }
                 catch (Exception) { /* ignored */ }
             });
-            PlayerAttack.Clear();
+            _playerAttack.Clear();
 
 
             Engine.WriteText(new Point(0,0), $"{Math.Round(this.GetFramerate())}",2 );
