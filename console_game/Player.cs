@@ -4,6 +4,8 @@ namespace console_game;
 
 public class Player
 {
+    public enum Direction { Up = 1, Down, Left, Right }
+    
     public int Health;
     public Point Pos = new Point(0, 0);
     public long AttackCd = 100;
@@ -14,21 +16,21 @@ public class Player
         this.Health = health;
         this.atk = 0;
     }
-    public void Move(int ch)
+    public void Move(Direction ch)
     {
         switch (ch)
         {
-            case 1:
+            case Direction.Up:
                 Pos -= new Point(0, 1);
                 break;
-            case 2:
+            case Direction.Down:
                 Pos += new Point(0, 1);
                 break;
-            case 3:
-                Pos += new Point(1, 0);
-                break;
-            case 4:
+            case Direction.Left:
                 Pos -= new Point(1, 0);
+                break;
+            case Direction.Right:
+                Pos += new Point(1, 0);
                 break;
         }
     }
